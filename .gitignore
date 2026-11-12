@@ -1,4 +1,8 @@
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
 venv/
+
+# IDE / OS
 .vscode/
+.DS_Store
