@@ -118,3 +118,6 @@ python main.py
 
 ### 점수 확인
 ![점수 확인](docs/screenshots/score.png)
+
+cd quiz-clone
+code README.md
