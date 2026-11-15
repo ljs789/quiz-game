@@ -87,8 +87,37 @@
             ],
             "answer": 1,
             "hint": ""
+        },
+        {
+            "question": "4",
+            "choices": [
+                "1",
+                "2",
+                "3",
+                "4"
+            ],
+            "answer": 1,
+            "hint": ""
+        },
+        {
+            "question": "1+11=?",
+            "choices": [
+                "12",
+                "13",
+                "14",
+                "15"
+            ],
+            "answer": 1,
+            "hint": ""
         }
     ],
-    "best_score": null,
-    "history": []
+    "best_score": 33,
+    "history": [
+        {
+            "datetime": "2026-11-15 11:25:19",
+            "total": 3,
+            "correct": 1,
+            "score": 33
+        }
+    ]
 }
