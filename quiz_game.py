@@ -1,5 +1,6 @@
 """게임 전체를 관리하는 QuizGame 클래스."""
 
+import random
 from quiz import Quiz
 
 LINE = "=" * 40
@@ -105,9 +106,85 @@ class QuizGame:
         while True:
             self.show_menu()
             choice = self.input_number("선택: ", self.MENU_PLAY, self.MENU_EXIT)
-
-            if choice == self.MENU_EXIT:
+            if choice == self.MENU_PLAY:
+                self.play_quiz()
+            elif choice == self.MENU_EXIT:
                 print("\n프로그램을 종료합니다.")
                 break
             else:
                 print("\n아직 준비 중인 기능입니다.")
+            
+    def input_answer(self, quiz):
+        """정답 번호를 입력받는다. 반환값: (고른 번호, 힌트 사용 여부)"""
+        used_hint = False
+        while True:
+            if quiz.has_hint() and not used_hint:
+                prompt = "정답 입력 (1-4, 힌트는 h): "
+            else:
+                prompt = "정답 입력 (1-4): "
+
+            text = input(prompt).strip()
+            if text == "":
+                print("[!] 입력이 비어 있습니다. 1-4 사이의 숫자를 입력하세요.")
+                continue
+            if text.lower() == "h":
+                if not quiz.has_hint():
+                    print("[!] 이 문제에는 힌트가 없습니다.")
+                elif used_hint:
+                    print(f"[힌트] {quiz.hint}")
+                else:
+                    used_hint = True
+                    print(f"[힌트] {quiz.hint} (힌트 사용: 이 문제 점수 절반)")
+                continue
+            try:
+                number = int(text)
+            except ValueError:
+                print("[!] 잘못된 입력입니다. 1-4 사이의 숫자를 입력하세요.")
+                continue
+            if number < 1 or number > Quiz.CHOICE_COUNT:
+                print("[!] 잘못된 입력입니다. 1-4 사이의 숫자를 입력하세요.")
+                continue
+            return number, used_hint
+
+    def play_quiz(self):
+        if len(self.quizzes) == 0:
+            print("\n[!] 등록된 퀴즈가 없습니다. 먼저 퀴즈를 추가하세요.")
+            return
+
+        total = len(self.quizzes)
+        print(f"\n등록된 퀴즈는 총 {total}개입니다.")
+        count = self.input_number(f"몇 문제를 풀까요? (1-{total}): ", 1, total)
+
+        # 문제 순서를 랜덤하게 섞어서 count개를 뽑는다.
+        selected = random.sample(self.quizzes, count)
+
+        print(f"\n퀴즈를 시작합니다! (총 {count}문제)")
+
+        correct_count = 0
+        points = 0.0  # 정답 1점, 힌트를 쓰고 맞히면 0.5점
+
+        for number, quiz in enumerate(selected, start=1):
+            print()
+            print(SUB_LINE)
+            quiz.display(number)
+            user_answer, used_hint = self.input_answer(quiz)
+
+            if quiz.is_correct(user_answer):
+                correct_count += 1
+                if used_hint:
+                    points += 0.5
+                else:
+                    points += 1
+                print("[O] 정답입니다!")
+            else:
+                correct_text = quiz.choices[quiz.answer - 1]
+                print(f"[X] 오답입니다. 정답은 {quiz.answer}번 ({correct_text}) 입니다.")
+
+        score = round(points / count * 100)
+        self.show_result(count, correct_count, score)
+        print(LINE)
+
+    def show_result(self, count, correct_count, score):
+        print()
+        print(LINE)
+        print(f"결과: {count}문제 중 {correct_count}문제 정답! ({score}점)")
