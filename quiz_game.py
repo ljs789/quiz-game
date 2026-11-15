@@ -1,11 +1,11 @@
 """게임 전체를 관리하는 QuizGame 클래스."""
 
 import random
+
 from quiz import Quiz
 
 LINE = "=" * 40
 SUB_LINE = "-" * 40
-
 
 
 def create_default_quizzes():
@@ -106,16 +106,19 @@ class QuizGame:
         while True:
             self.show_menu()
             choice = self.input_number("선택: ", self.MENU_PLAY, self.MENU_EXIT)
+
             if choice == self.MENU_PLAY:
                 self.play_quiz()
             elif choice == self.MENU_ADD:
                 self.add_quiz()
+            elif choice == self.MENU_LIST:
+                self.show_quiz_list()
             elif choice == self.MENU_EXIT:
                 print("\n프로그램을 종료합니다.")
                 break
             else:
                 print("\n아직 준비 중인 기능입니다.")
-            
+
     def input_answer(self, quiz):
         """정답 번호를 입력받는다. 반환값: (고른 번호, 힌트 사용 여부)"""
         used_hint = False
@@ -191,7 +194,6 @@ class QuizGame:
         print(LINE)
         print(f"결과: {count}문제 중 {correct_count}문제 정답! ({score}점)")
 
-        
     def input_text(self, prompt):
         """비어 있지 않은 문자열을 입력받을 때까지 반복한다."""
         while True:
@@ -202,8 +204,6 @@ class QuizGame:
             return text
 
     def add_quiz(self):
-            elif choice == self.MENU_LIST:
-                self.show_quiz_list()
         print("\n새로운 퀴즈를 추가합니다.\n")
 
         question = self.input_text("문제를 입력하세요: ")
@@ -216,7 +216,6 @@ class QuizGame:
         self.quizzes.append(Quiz(question, choices, answer, hint))
         print("\n퀴즈가 추가되었습니다!")
 
-    
     def show_quiz_list(self):
         if len(self.quizzes) == 0:
             print("\n[!] 등록된 퀴즈가 없습니다.")
