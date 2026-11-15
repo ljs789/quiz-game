@@ -27,3 +27,36 @@ class Quiz:
 
     def has_hint(self):
         return self.hint != ""
+
+    def to_dict(self):
+        """JSON으로 저장할 수 있도록 dict로 변환한다."""
+        return {
+            "question": self.question,
+            "choices": self.choices,
+            "answer": self.answer,
+            "hint": self.hint,
+        }
+
+    @classmethod
+    def from_dict(cls, data):
+        """dict에서 Quiz 객체를 만든다. 형식이 잘못되면 ValueError를 발생시킨다."""
+        if not isinstance(data, dict):
+            raise ValueError("퀴즈 데이터가 dict가 아닙니다.")
+
+        question = data.get("question")
+        choices = data.get("choices")
+        answer = data.get("answer")
+        hint = data.get("hint", "")
+
+        if not isinstance(question, str) or question.strip() == "":
+            raise ValueError("문제 형식이 잘못되었습니다.")
+        if not isinstance(choices, list) or len(choices) != cls.CHOICE_COUNT:
+            raise ValueError("선택지 형식이 잘못되었습니다.")
+        if not all(isinstance(choice, str) for choice in choices):
+            raise ValueError("선택지 형식이 잘못되었습니다.")
+        if type(answer) is not int or not 1 <= answer <= cls.CHOICE_COUNT:
+            raise ValueError("정답 형식이 잘못되었습니다.")
+        if not isinstance(hint, str):
+            hint = ""
+
+        return cls(question, choices, answer, hint)
