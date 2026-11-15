@@ -108,6 +108,8 @@ class QuizGame:
             choice = self.input_number("선택: ", self.MENU_PLAY, self.MENU_EXIT)
             if choice == self.MENU_PLAY:
                 self.play_quiz()
+            elif choice == self.MENU_ADD:
+                self.add_quiz()
             elif choice == self.MENU_EXIT:
                 print("\n프로그램을 종료합니다.")
                 break
@@ -188,3 +190,26 @@ class QuizGame:
         print()
         print(LINE)
         print(f"결과: {count}문제 중 {correct_count}문제 정답! ({score}점)")
+
+        
+    def input_text(self, prompt):
+        """비어 있지 않은 문자열을 입력받을 때까지 반복한다."""
+        while True:
+            text = input(prompt).strip()
+            if text == "":
+                print("[!] 입력이 비어 있습니다. 다시 입력하세요.")
+                continue
+            return text
+
+    def add_quiz(self):
+        print("\n새로운 퀴즈를 추가합니다.\n")
+
+        question = self.input_text("문제를 입력하세요: ")
+        choices = []
+        for number in range(1, Quiz.CHOICE_COUNT + 1):
+            choices.append(self.input_text(f"선택지 {number}: "))
+        answer = self.input_number("정답 번호 (1-4): ", 1, Quiz.CHOICE_COUNT)
+        hint = input("힌트 (없으면 그냥 Enter): ").strip()
+
+        self.quizzes.append(Quiz(question, choices, answer, hint))
+        print("\n퀴즈가 추가되었습니다!")
