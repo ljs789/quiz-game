@@ -119,5 +119,9 @@ python main.py
 ### 점수 확인
 ![점수 확인](docs/screenshots/score.png)
 
+<<<<<<< HEAD
 cd quiz-clone
+=======
+cd C:\Users\lghyh\Desktop\quiz-clone
+>>>>>>> 8fb58aa11bc5d09dd29f40bc07b75263c303334d
 code README.md
