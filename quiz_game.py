@@ -202,6 +202,8 @@ class QuizGame:
             return text
 
     def add_quiz(self):
+            elif choice == self.MENU_LIST:
+                self.show_quiz_list()
         print("\n새로운 퀴즈를 추가합니다.\n")
 
         question = self.input_text("문제를 입력하세요: ")
@@ -213,3 +215,15 @@ class QuizGame:
 
         self.quizzes.append(Quiz(question, choices, answer, hint))
         print("\n퀴즈가 추가되었습니다!")
+
+    
+    def show_quiz_list(self):
+        if len(self.quizzes) == 0:
+            print("\n[!] 등록된 퀴즈가 없습니다.")
+            return
+
+        print(f"\n등록된 퀴즈 목록 (총 {len(self.quizzes)}개)\n")
+        print(SUB_LINE)
+        for number, quiz in enumerate(self.quizzes, start=1):
+            print(f"[{number}] {quiz.question}")
+        print(SUB_LINE)
