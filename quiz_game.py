@@ -1,6 +1,7 @@
 """게임 전체를 관리하는 QuizGame 클래스."""
 
 import random
+from datetime import datetime
 
 from quiz import Quiz
 
@@ -113,11 +114,13 @@ class QuizGame:
                 self.add_quiz()
             elif choice == self.MENU_LIST:
                 self.show_quiz_list()
-            elif choice == self.MENU_EXIT:
+            elif choice == self.MENU_SCORE:
+                self.show_score()
+            elif choice == self.MENU_DELETE:
+                self.delete_quiz()
+            else:
                 print("\n프로그램을 종료합니다.")
                 break
-            else:
-                print("\n아직 준비 중인 기능입니다.")
 
     def input_answer(self, quiz):
         """정답 번호를 입력받는다. 반환값: (고른 번호, 힌트 사용 여부)"""
@@ -187,12 +190,48 @@ class QuizGame:
 
         score = round(points / count * 100)
         self.show_result(count, correct_count, score)
-        print(LINE)
+        self.update_score(count, correct_count, score)
 
     def show_result(self, count, correct_count, score):
         print()
         print(LINE)
         print(f"결과: {count}문제 중 {correct_count}문제 정답! ({score}점)")
+
+    def update_score(self, count, correct_count, score):
+        """기록을 남기고, 최고 점수와 비교해 갱신한다."""
+        self.history.append(
+            {
+                "datetime": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "total": count,
+                "correct": correct_count,
+                "score": score,
+            }
+        )
+
+        if self.best_score is None or score > self.best_score:
+            self.best_score = score
+            print("새로운 최고 점수입니다!")
+        else:
+            print(f"현재 최고 점수: {self.best_score}점")
+        print(LINE)
+
+    def show_score(self):
+        if self.best_score is None:
+            print("\n[!] 아직 퀴즈를 풀지 않았습니다. 퀴즈를 먼저 풀어 보세요.")
+            return
+
+        print(f"\n최고 점수: {self.best_score}점")
+
+        if len(self.history) > 0:
+            print(f"\n최근 게임 기록 (전체 {len(self.history)}회 중 최근 5회)")
+            print(SUB_LINE)
+            for record in self.history[-5:]:
+                print(
+                    f"{record['datetime']} | "
+                    f"{record['total']}문제 중 {record['correct']}문제 정답 | "
+                    f"{record['score']}점"
+                )
+            print(SUB_LINE)
 
     def input_text(self, prompt):
         """비어 있지 않은 문자열을 입력받을 때까지 반복한다."""
@@ -226,3 +265,18 @@ class QuizGame:
         for number, quiz in enumerate(self.quizzes, start=1):
             print(f"[{number}] {quiz.question}")
         print(SUB_LINE)
+
+    def delete_quiz(self):
+        if len(self.quizzes) == 0:
+            print("\n[!] 삭제할 퀴즈가 없습니다.")
+            return
+
+        self.show_quiz_list()
+        total = len(self.quizzes)
+        number = self.input_number(f"삭제할 퀴즈 번호 (1-{total}, 취소는 0): ", 0, total)
+        if number == 0:
+            print("삭제를 취소했습니다.")
+            return
+
+        removed = self.quizzes.pop(number - 1)
+        print(f"\n삭제했습니다: {removed.question}")
