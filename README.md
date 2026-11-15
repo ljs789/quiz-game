@@ -119,9 +119,13 @@ python main.py
 ### 점수 확인
 ![점수 확인](docs/screenshots/score.png)
 
-<<<<<<< HEAD
-cd quiz-clone
-=======
-cd C:\Users\lghyh\Desktop\quiz-clone
->>>>>>> 8fb58aa11bc5d09dd29f40bc07b75263c303334d
-code README.md
+### 퀴즈 목록
+![퀴즈 목록](docs/screenshots/list.png)
+
+## 제출 자료
+
+### 개발 환경
+![개발 환경](docs/screenshots/dev_env.png)
+
+### Git 커밋 기록 (git log --oneline --graph)
+![Git 기록](docs/screenshots/git_log.png)
